@@ -1,120 +1,77 @@
-# Victor Hugo CMS Template
-<!-- Markdown snippet -->
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/bdougie/casper-cms-template)
+# Ferrari Technologies website (ferrrari-dev)
 
-![casper theme image](https://s3-us-west-1.amazonaws.com/publis-brian-images/casper.jpg)
+A small static website for "Ferrari Technologies", built with the [Hugo](https://gohugo.io/) static site generator and the Casper blog theme. It is a fork of the "Victor Hugo" starter template, with the site title, description and branding changed. The site is currently a skeleton: the home page and navigation work, but there are no posts or pages yet.
 
-**A [Hugo](http://gohugo.io/) boilerplate for creating truly epic websites**
+## What it does
 
-This is a boilerplate for using Hugo as a static site generator and Gulp + Weback as your
-asset pipeline.
+- Builds a single-column, blog-style site with a cover image, logo, author box and post list.
+- Compiles CSS with PostCSS (cssnext) and JavaScript with Babel and webpack through Gulp.
+- Includes an optional Netlify CMS admin page at `/admin` for editing posts in the browser (it needs a GitHub repository and Netlify login, see below).
+- Produces plain static files in `dist/`, so it can be hosted anywhere.
 
-It's setup to use post-css and babel for CSS and JavaScript.
+## Tech stack
 
-## Usage
-Be sure that you have the latest node, npm and [Hugo](https://gohugo.io/overview/installing/) installed. If you need to install hugo, run:
+- Hugo (static site generator) with the `hugo-theme-casper` theme in `site/themes/`
+- Gulp 3, webpack 1, Babel 6, PostCSS (Node build tooling from 2016)
+- Netlify CMS 1.x (loaded from a CDN) and Netlify for deployment
 
-Clone this repository and run:
+## Run it
+
+You need Node.js and npm, plus Hugo on your PATH. The tooling is old (Gulp 3 and webpack 1), so use an older Node release (Node 10 or earlier) and an older Hugo release (the theme was written for Hugo 0.1x and may not build on the newest Hugo). This was not rebuilt during the inspection, because package installs were not available.
 
 ```bash
 npm install
 npm start
 ```
 
-Then visit http://localhost:3000/ - BrowserSync will automatically reload CSS or
-refresh the page when stylesheets or content changes.
+Then open http://localhost:3000/. BrowserSync reloads the page when CSS, JavaScript or content changes.
 
-To build your static output to the `/dist` folder, use:
+## Build static files for hosting
 
 ```bash
 npm run build
 ```
 
-## Structure
+The finished site is written to `dist/`. Serve that folder with any static host, for example:
+
+```bash
+npx serve dist
+```
+
+No API keys or secrets are needed to build or host the site. The `netlify.toml` file already tells Netlify to run `npm run build` and publish `dist/`.
+
+## Project layout
 
 ```
-|--site                // Everything in here will be built with hugo
-|  |--content          // Pages and collections - ask if you need extra pages
-|  |--data             // YAML data files with any data for use in examples
-|  |--layouts          // This is where all templates go
-|  |  |--partials      // This is where includes live
-|  |  |--index.html    // The index page
-|  |--static           // Files in here ends up in the public folder
-|--src                 // Files that will pass through the asset pipeline
-|  |--css              // CSS files in the root of this folder will end up in /css/...
-|  |--js               // app.js will be compiled to /js/app.js with babel
+site/                 Everything Hugo builds
+  config.toml         Site title, description, author and theme settings
+  content/            Pages and posts (currently empty)
+  static/             Files copied as is (images, admin page)
+  themes/             The Casper theme
+src/css, src/js       Assets that go through the Gulp and webpack pipeline
+gulpfile.babel.js     Build tasks
+webpack.conf.js       JavaScript bundling
 ```
-## CMS
 
-### How it works
+To add a post, create a Markdown file under `site/content/post/`. Settings such as the title, cover image and author live in `site/config.toml`.
 
-Netlify CMS is a single-page app that you pull into the `/admin` part of your site.
+## Optional: edit content with Netlify CMS
 
-It presents a clean UI for editing content stored in a Git repository.
+1. Open `site/static/admin/config.yml` and replace `owner/repository` with `maxawad/ferrrari-dev`.
+2. Deploy the repository to Netlify.
+3. Set up GitHub as an authentication provider in the Netlify dashboard, following the [Netlify documentation](https://www.netlify.com/docs/authentication-providers).
+4. Visit `/admin` on the deployed site and log in.
 
-You setup a YAML config to describe the content model of your site, and typically
-tweak the main layout of the CMS a bit to fit your own site.
+## Status
 
-### Setup GitHub as a Backend
+Prototype. The site structure and theme are in place, but the content is a placeholder ("Under Construction") and the last change was made in 2020.
 
-In the `config.yml` file [change the GitHub owner and repo](https://github.com/bdougie/strata-cms-template/blob/master/site/static/admin/config.yml#L3) to reflect your repo:
+## Credits
 
-```yaml
-backend:
-  name: github
-  repo: owner/repo # Path to your Github repository
-  branch: master # Branch to update (master by default)
-  
-  ...
-```
-When a user navigates to `/admin` she'll be prompted to login, and once authenticated
-she'll be able to create new content or edit existing content.
-The default Github-based authenticator integrates with Netlify's [Authentication Provider feature](https://www.netlify.com/docs/authentication-providers) and the repository
-backend integrates directly with Github's API.
+- Starter template: Victor Hugo / Casper CMS template, via [bdougie/casper-cms-template](https://github.com/bdougie/casper-cms-template) by Brian Douglas (bdougie), and contributors.
+- Theme: [hugo-theme-casper](https://github.com/vjeantet/hugo-theme-casper) by Valère Jeantet, ported from the [Casper theme for Ghost](https://github.com/TryGhost/Casper).
+- Site customization: Max Awad.
 
-To get everything hooked up, setup continuous deployment from Github to Netlify
-and then follow [the documentation](https://www.netlify.com/docs/authentication-providers)
-to setup Github as an authentication provider.
+## License
 
-That's it, now you should be able to go to the `/admin` section of your site and
-log in.
-
-### Find out more and contribute
-
-Visit the [Netlify CMS](https://github.com/netlify/netlify-cms/) to find out more and contribute. 
-
-## Basic Concepts
-
-You can read more about Hugo's template language in their documentation here:
-
-https://gohugo.io/templates/overview/
-
-The most useful page there is the one about the available functions:
-
-https://gohugo.io/templates/functions/
-
-For assets that are completely static and don't need to go through the asset pipeline,
-use the `site/static` folder. Images, font-files, etc, all go there.
-
-Files in the static folder ends up in the web root. So a file called `site/static/favicon.ico`
-will end up being available as `/favicon.ico` and so on...
-
-The `src/js/app.js` file is the entrypoint for webpack and will be built to `/dist/app.js`.
-
-You can use ES6 and use both relative imports or import libraries from npm.
-
-Any CSS file directly under the `src/css/` folder will get compiled with [PostCSS Next](http://cssnext.io/)
-to `/dist/css/{filename}.css`. Import statements will be resolved as part of the build
-
-## Deploying to netlify
-
-- Push your clone to your own GitHub repository.
-- [Create a new site on Netlify](https://app.netlify.com/start) and link the repository.
-
-Now netlify will build and deploy your site whenever you push to git.
-
-##  Enjoy!!
-
-#### License
-
-[MIT](LICENSE)
+The upstream starter and theme are MIT licensed (see `site/themes/hugo-theme-casper/LICENSE.md`). This repository does not yet have a top-level license file.
